@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stadt Olsberg - Schulen - EDV-Ticket melden</title>
+
+    <style>
+        :root {
+            --primary: #145da0;
+            --primary-dark: #0d3f6e;
+            --background: #f3f6f9;
+            --border: #cfd8e3;
+            --text: #1e293b;
+            --muted: #64748b;
+            --danger: #b42318;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.45;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.10);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .intro {
+            margin-top: 0;
+            color: var(--muted);
+        }
+
+        fieldset {
+            margin: 24px 0;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        legend {
+            padding: 0 8px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font: inherit;
+            color: var(--text);
+            background: #ffffff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid rgba(20, 93, 160, 0.25);
+            border-color: var(--primary);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .hint {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-weight: normal;
+        }
+
+        .checkbox input {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 6px;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit {
+            color: #ffffff;
+            background: var(--primary);
+        }
+
+        .submit:hover {
+            background: var(--primary-dark);
+        }
+
+        .reset {
+            color: var(--text);
+            background: #e2e8f0;
+        }
+
+        .privacy {
+            margin-top: 22px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Stadt Olsberg - Schulen - EDV-Ticket melden</h1>
+
+        <p class="intro">
+            Bitte füllen Sie möglichst alle Felder aus. Nach dem Absenden öffnet sich
+            die Standard-Mail-App mit einer vorbereiteten E-Mail. Bitte prüfen Sie
+            die Angaben und klicken dort anschließend auf „Senden“.
+        </p>
+
+        <form id="ticketForm">
+            <fieldset>
+                <legend>Kontakt</legend>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label class="required" for="name">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label class="required" for="email">E-Mail-Adresse</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+                </div>
+
+                 <div class="field">
+                        <label class="required" for="deviceType">Schule / Standort</label>
+                        <select id="deviceType" name="deviceType" required>
+                            <option value="">Bitte auswählen</option>
+                            <option>Franziskus Grundschule</option>
+                            <option>Kardinal-von-Galen-Schule </option>
+                            <option>St. Martinus-Schule</option>
+                            <option>Schule an der Ruhraue</option>
+                            <option>Sekundarschule</option>
+                            
+                        </select>
+                    </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Ort und Gerät</legend>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label class="required" for="room">Raumnummer</label>
+                        <input
+                            type="text"
+                            id="room"
+                            name="room"
+                            placeholder="z. B. Raum 204"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label class="required" for="deviceType">Gerätetyp</label>
+                        <select id="deviceType" name="deviceType" required>
+                            <option value="">Bitte auswählen</option>
+                            <option>Desktop-PC</option>
+                            <option>Notebook</option>
+                            <option>Tablet / iPad</option>
+                            <option>Beamer</option>
+                            <option>Display / Smartboard</option>
+                            <option>Drucker</option>
+                            <option>Telefon</option>
+                            <option>Netzwerk / WLAN</option>
+                            <option>Sonstiges</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="asset">Inventarnummer / Gerätename</label>
+                        <input
+                            type="text"
+                            id="asset"
+                            name="asset"
+                            placeholder="falls bekannt"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="operatingSystem">Betriebssystem</label>
+                        <input
+                            type="text"
+                            id="operatingSystem"
+                            name="operatingSystem"
+                            placeholder="z. B. Windows 11, iPadOS"
+                        >
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Fehlerbeschreibung</legend>
+
+                <div class="field">
+                    <label class="required" for="category">Kategorie</label>
+                    <select id="category" name="category" required>
+                        <option value="">Bitte auswählen</option>
+                        <option>Computer / Notebook</option>
+                        <option>iPad / Tablet</option>
+                        <option>Beamer / Display / Smartboard</option>
+                        <option>Drucker</option>
+                        <option>WLAN / Netzwerk / Internet</option>
+                        <option>Benutzerkonto / Passwort</option>
+                        <option>Software / Anwendung</option>
+                        <option>E-Mail</option>
+                        <option>Sonstiges</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="required" for="priority">Dringlichkeit</label>
+                    <select id="priority" name="priority" required>
+                        <option value="">Bitte auswählen</option>
+                        <option>Niedrig – Bearbeitung kann warten</option>
+                        <option>Normal – Bearbeitung im normalen Ablauf</option>
+                        <option>Hoch – Unterricht oder Arbeit ist eingeschränkt</option>
+                        <option>Sehr hoch – Unterricht oder Arbeit nicht möglich</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="required" for="description">
+                        Genaue Fehlerbeschreibung
+                    </label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Was funktioniert nicht? Was wurde erwartet? Welche Fehlermeldung wird angezeigt?"
+                        required
+                    ></textarea>
+                    <div class="hint">
+                        Bitte möglichst den genauen Wortlaut einer Fehlermeldung
+                        angeben.
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="steps">
+                        Bereits durchgeführte Maßnahmen
+                    </label>
+                    <textarea
+                        id="steps"
+                        name="steps"
+                        placeholder="z. B. Gerät neu gestartet, Kabel geprüft, anderes Kabel getestet ..."
+                    ></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="availability">
+                        Erreichbarkeit / mögliche Termine
+                    </label>
+                    <input
+                        type="text"
+                        id="availability"
+                        name="availability"
+                        placeholder="z. B. Dienstag ab 13:00 Uhr im Raum 204"
+                    >
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Zusätzliche Angaben</legend>
+
+                <div class="field">
+                    <label for="additional">
+                        Weitere Informationen
+                    </label>
+                    <textarea
+                        id="additional"
+                        name="additional"
+                        placeholder="Weitere Hinweise, betroffene Personen oder Besonderheiten ..."
+                    ></textarea>
+                </div>
+
+                <label class="checkbox">
+                    <input
+                        type="checkbox"
+                        id="privacy"
+                        name="privacy"
+                        required
+                    >
+                    <span>
+                        Ich bestätige, dass die Angaben zur Bearbeitung des
+                        IT-Problems an den IT-Support übermittelt werden.
+                    </span>
+                </label>
+            </fieldset>
+
+            <div class="actions">
+                <button type="submit" class="submit">
+                    Ticket als E-Mail vorbereiten
+                </button>
+
+                <button type="reset" class="reset">
+                    Formular leeren
+                </button>
+            </div>
+        </form>
+
+        <p class="privacy">
+            Hinweis: Diese HTML-Datei speichert die Daten nicht auf einem Server.
+            Sie erstellt lediglich eine vorbereitete E-Mail in der auf dem Gerät
+            eingestellten Standard-Mail-App.
+        </p>
+    </main>
+
+    <script>
+        /*
+         * HIER DIE EMPFÄNGERADRESSE EINTRAGEN.
+         */
+        const supportEmail = "it-support@deine-schule.de";
+
+        const form = document.getElementById("ticketForm");
+
+        function valueOf(id) {
+            const element = document.getElementById(id);
+            return element.value.trim();
+        }
+
+        function buildMailBody() {
+            const lines = [
+                "IT-TICKET",
+                "==========",
+                "",
+                "KONTAKT",
+                "Name: " + valueOf("name"),
+                "E-Mail: " + valueOf("email"),
+                "Schule / Standort: " + valueOf("school"),
+                "",
+                "ORT UND GERÄT",
+                "Raumnummer: " + valueOf("room"),
+                "Gerätetyp: " + valueOf("deviceType"),
+                "Inventarnummer / Gerätename: " + (valueOf("asset") || "Nicht angegeben"),
+                "Betriebssystem: " + (valueOf("operatingSystem") || "Nicht angegeben"),
+                "",
+                "FEHLER",
+                "Kategorie: " + valueOf("category"),
+                "Dringlichkeit: " + valueOf("priority"),
+                "",
+                "Genaue Fehlerbeschreibung:",
+                valueOf("description"),
+                "",
+                "Bereits durchgeführte Maßnahmen:",
+                valueOf("steps") || "Keine Angaben",
+                "",
+                "Erreichbarkeit / mögliche Termine:",
+                valueOf("availability") || "Keine Angaben",
+                "",
+                "WEITERE ANGABEN",
+                valueOf("additional") || "Keine Angaben",
+                "",
+                "Erstellt am: " + new Date().toLocaleString("de-DE")
+            ];
+
+            return lines.join("\n");
+        }
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const subject =
+                "[IT-Ticket] " +
+                valueOf("school") +
+                " – " +
+                valueOf("category") +
+                " – " +
+                valueOf("room");
+
+            const body = buildMailBody();
+
+            const mailtoUrl =
+                "mailto:" +
+                encodeURIComponent(supportEmail) +
+                "?subject=" +
+                encodeURIComponent(subject) +
+                "&body=" +
+                encodeURIComponent(body);
+
+            window.location.href = mailtoUrl;
+        });
+    </script>
+</body>
+</html>
