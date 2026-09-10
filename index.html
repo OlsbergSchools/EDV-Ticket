@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EDV-Ticket für Schulen der Stadt Olsberg - Fehler melden an IT-Support">
 
     <title>Stadt Olsberg - Schulen - EDV-Ticket melden</title>
 
@@ -163,6 +164,23 @@
             font-size: 0.85rem;
         }
 
+        .sr-only {
+            position: absolute !important;
+            height: 1px; width: 1px;
+            overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+            white-space: nowrap; border: 0; padding: 0; margin: -1px;
+        }
+
+        #formMessage {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        #formMessage.success { background: #ecfdf5; color: #065f46; border: 1px solid #bbf7d0; display:block }
+        #formMessage.error { background: #fff1f2; color: #9f1239; border: 1px solid #fecaca; display:block }
+
         @media (max-width: 650px) {
             body {
                 padding: 10px;
@@ -186,11 +204,11 @@
 
         <p class="intro">
             Bitte füllen Sie möglichst alle Felder aus. Nach dem Absenden öffnet sich
-            die Standard-Mail-App mit einer vorbereiteten E-Mail. Bitte prüfen Sie
+            die Standard-Mail-App mit einer vorbereiteten E-Mail oder — wenn konfiguriert — das Formular wird direkt per E‑Mail über Formspree gesendet. Bitte prüfen Sie
             die Angaben und klicken dort anschließend auf „Senden“.
         </p>
 
-        <form id="ticketForm">
+        <form id="ticketForm" enctype="multipart/form-data" novalidate>
             <fieldset>
                 <legend>Kontakt</legend>
 
@@ -202,7 +220,9 @@
                             id="name"
                             name="name"
                             autocomplete="name"
+                            aria-required="true"
                             required
+                            autofocus
                         >
                     </div>
 
@@ -213,21 +233,21 @@
                             id="email"
                             name="email"
                             autocomplete="email"
+                            aria-required="true"
                             required
                         >
                     </div>
                 </div>
 
                  <div class="field">
-                        <label class="required" for="deviceType">Schule / Standort</label>
-                        <select id="deviceType" name="deviceType" required>
-                            <option value="">Bitte auswählen</option>
+                        <label class="required" for="school">Schule / Standort</label>
+                        <select id="school" name="school" required aria-required="true">
+                            <option value="" disabled selected>Bitte auswählen</option>
                             <option>Franziskus Grundschule</option>
-                            <option>Kardinal-von-Galen-Schule </option>
+                            <option>Kardinal-von-Galen-Schule</option>
                             <option>St. Martinus-Schule</option>
                             <option>Schule an der Ruhraue</option>
                             <option>Sekundarschule</option>
-                            
                         </select>
                     </div>
             </fieldset>
@@ -243,14 +263,15 @@
                             id="room"
                             name="room"
                             placeholder="z. B. Raum 204"
+                            aria-required="true"
                             required
                         >
                     </div>
 
                     <div class="field">
                         <label class="required" for="deviceType">Gerätetyp</label>
-                        <select id="deviceType" name="deviceType" required>
-                            <option value="">Bitte auswählen</option>
+                        <select id="deviceType" name="deviceType" required aria-required="true">
+                            <option value="" disabled selected>Bitte auswählen</option>
                             <option>Desktop-PC</option>
                             <option>Notebook</option>
                             <option>Tablet / iPad</option>
@@ -292,8 +313,8 @@
 
                 <div class="field">
                     <label class="required" for="category">Kategorie</label>
-                    <select id="category" name="category" required>
-                        <option value="">Bitte auswählen</option>
+                    <select id="category" name="category" required aria-required="true">
+                        <option value="" disabled selected>Bitte auswählen</option>
                         <option>Computer / Notebook</option>
                         <option>iPad / Tablet</option>
                         <option>Beamer / Display / Smartboard</option>
@@ -308,8 +329,8 @@
 
                 <div class="field">
                     <label class="required" for="priority">Dringlichkeit</label>
-                    <select id="priority" name="priority" required>
-                        <option value="">Bitte auswählen</option>
+                    <select id="priority" name="priority" required aria-required="true">
+                        <option value="" disabled selected>Bitte auswählen</option>
                         <option>Niedrig – Bearbeitung kann warten</option>
                         <option>Normal – Bearbeitung im normalen Ablauf</option>
                         <option>Hoch – Unterricht oder Arbeit ist eingeschränkt</option>
@@ -326,8 +347,10 @@
                         name="description"
                         placeholder="Was funktioniert nicht? Was wurde erwartet? Welche Fehlermeldung wird angezeigt?"
                         required
+                        aria-required="true"
+                        aria-describedby="descriptionHint"
                     ></textarea>
-                    <div class="hint">
+                    <div id="descriptionHint" class="hint">
                         Bitte möglichst den genauen Wortlaut einer Fehlermeldung
                         angeben.
                     </div>
@@ -371,12 +394,19 @@
                     ></textarea>
                 </div>
 
+                <div class="field">
+                    <label for="attachments">Dateien / Anhänge</label>
+                    <input type="file" id="attachments" name="attachments" multiple aria-describedby="attachmentsHint">
+                    <div id="attachmentsHint" class="hint">Anhänge werden nur an den Server gesendet, wenn ein Formular-Endpoint (z. B. Formspree) konfiguriert ist.</div>
+                </div>
+
                 <label class="checkbox">
                     <input
                         type="checkbox"
                         id="privacy"
                         name="privacy"
                         required
+                        aria-required="true"
                     >
                     <span>
                         Ich bestätige, dass die Angaben zur Bearbeitung des
@@ -387,33 +417,45 @@
 
             <div class="actions">
                 <button type="submit" class="submit">
-                    Ticket als E-Mail vorbereiten
+                    Ticket absenden
                 </button>
 
                 <button type="reset" class="reset">
                     Formular leeren
                 </button>
             </div>
+
+            <div id="formMessage" role="status" aria-live="polite"></div>
         </form>
 
         <p class="privacy">
-            Hinweis: Diese HTML-Datei speichert die Daten nicht auf einem Server.
-            Sie erstellt lediglich eine vorbereitete E-Mail in der auf dem Gerät
-            eingestellten Standard-Mail-App.
+            Hinweis: Diese HTML-Datei kann lokal eine E-Mail vorbereiten oder — sofern konfiguriert — die Daten über Formspree sicher versenden. Die Datei speichert die Daten nicht dauerhaft auf diesem Server.
         </p>
+
+        <noscript>
+            <p class="privacy">JavaScript ist deaktiviert. Bitte senden Sie eine E‑Mail an <a href="mailto:it-support@deine-schule.de">it-support@deine-schule.de</a> mit den relevanten Informationen.</p>
+        </noscript>
     </main>
 
     <script>
         /*
-         * HIER DIE EMPFÄNGERADRESSE EINTRAGEN.
+         * KONFIGURATION
+         * Tragen Sie hier Ihre Empfängeradresse ein und optional das Formspree-Formular (z. B. "https://formspree.io/f/xyz...").
          */
         const supportEmail = "it-support@deine-schule.de";
+        // Wenn Sie Formspree verwenden möchten, setzen Sie die URL hier (z. B. "https://formspree.io/f/your_form_id").
+        // Lassen Sie die Zeichenkette leer, um die mailto-Fallback-Logik zu verwenden.
+        const formspreeEndpoint = ""; // <-- set to your Formspree endpoint to enable direct POST
 
         const form = document.getElementById("ticketForm");
+        const formMessage = document.getElementById("formMessage");
 
         function valueOf(id) {
             const element = document.getElementById(id);
-            return element.value.trim();
+            if (!element) return "";
+            // For multiple select/file, handle differently
+            if (element.type === 'file') return element.files;
+            return (element.value || "").trim();
         }
 
         function buildMailBody() {
@@ -440,13 +482,13 @@
                 valueOf("description"),
                 "",
                 "Bereits durchgeführte Maßnahmen:",
-                valueOf("steps") || "Keine Angaben",
+                (valueOf("steps") || "Keine Angaben"),
                 "",
                 "Erreichbarkeit / mögliche Termine:",
-                valueOf("availability") || "Keine Angaben",
+                (valueOf("availability") || "Keine Angaben"),
                 "",
                 "WEITERE ANGABEN",
-                valueOf("additional") || "Keine Angaben",
+                (valueOf("additional") || "Keine Angaben"),
                 "",
                 "Erstellt am: " + new Date().toLocaleString("de-DE")
             ];
@@ -454,33 +496,166 @@
             return lines.join("\n");
         }
 
-        form.addEventListener("submit", function(event) {
+        function showMessage(text, type) {
+            formMessage.textContent = text;
+            formMessage.className = '';
+            if (type === 'success') formMessage.classList.add('success');
+            if (type === 'error') formMessage.classList.add('error');
+            formMessage.style.display = 'block';
+        }
+
+        async function sendToFormspree(formData) {
+            try {
+                const res = await fetch(formspreeEndpoint, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (res.ok) {
+                    showMessage('Ticket erfolgreich über Formspree versendet. Vielen Dank!', 'success');
+                    form.reset();
+                } else {
+                    const data = await res.json().catch(()=>null);
+                    const errorMsg = (data && data.error) ? data.error : 'Serverantwort: ' + res.status;
+                    showMessage('Fehler beim Versenden: ' + errorMsg, 'error');
+                }
+            } catch (err) {
+                showMessage('Fehler beim Senden: ' + err.message, 'error');
+            }
+        }
+
+        form.addEventListener("submit", async function(event) {
             event.preventDefault();
 
+            // Browser built-in validation
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
 
-            const subject =
-                "[IT-Ticket] " +
-                valueOf("school") +
-                " – " +
-                valueOf("category") +
-                " – " +
-                valueOf("room");
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
 
+            const subject = "[IT-Ticket] " + valueOf("school") + " – " + valueOf("category") + " – " + valueOf("room");
             const body = buildMailBody();
 
-            const mailtoUrl =
-                "mailto:" +
-                encodeURIComponent(supportEmail) +
-                "?subject=" +
-                encodeURIComponent(subject) +
-                "&body=" +
-                encodeURIComponent(body);
+            // If Formspree endpoint configured -> send via fetch (supports attachments)
+            if (formspreeEndpoint && formspreeEndpoint.trim() !== "") {
+                const fd = new FormData();
+                fd.append('subject', subject);
+                fd.append('message', body);
+                fd.append('name', valueOf('name'));
+                fd.append('email', valueOf('email'));
+                fd.append('school', valueOf('school'));
+                fd.append('room', valueOf('room'));
+                fd.append('deviceType', valueOf('deviceType'));
+                fd.append('asset', valueOf('asset'));
+                fd.append('operatingSystem', valueOf('operatingSystem'));
+                fd.append('category', valueOf('category'));
+                fd.append('priority', valueOf('priority'));
+                fd.append('description', valueOf('description'));
+                fd.append('steps', valueOf('steps'));
+                fd.append('availability', valueOf('availability'));
+                fd.append('additional', valueOf('additional'));
+                fd.append('consent', document.getElementById('privacy').checked ? 'yes' : 'no');
+                fd.append('createdAt', new Date().toLocaleString('de-DE'));
 
+                // attach files if any
+                const files = document.getElementById('attachments').files;
+                if (files && files.length) {
+                    for (let i = 0; i < files.length; i++) {
+                        fd.append('attachments[]', files[i], files[i].name);
+                    }
+                }
+
+                await sendToFormspree(fd);
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Otherwise: build mailto URL. Some mail clients limit URL length; provide fallback.
+            const mailtoBase = 'mailto:' + encodeURIComponent(supportEmail);
+            const mailtoUrl = mailtoBase + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+            const MAX_URL_LENGTH = 1800; // conservative threshold
+            if (mailtoUrl.length > MAX_URL_LENGTH) {
+                // Provide a copy-to-clipboard fallback and instruct the user
+                showMessage('Der vorbereitete Text ist zu lang für die Mail-App. Bitte kopieren Sie den Text manuell oder konfigurieren Sie ein Formspree-Endpoint.', 'error');
+
+                // create a temporary modal area with the message for copy
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.left = '0';
+                modal.style.right = '0';
+                modal.style.top = '0';
+                modal.style.bottom = '0';
+                modal.style.background = 'rgba(0,0,0,0.4)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '9999';
+
+                const box = document.createElement('div');
+                box.style.background = '#fff';
+                box.style.padding = '18px';
+                box.style.borderRadius = '8px';
+                box.style.maxWidth = '800px';
+                box.style.width = '94%';
+                box.style.maxHeight = '80%';
+                box.style.overflow = 'auto';
+
+                const heading = document.createElement('h2');
+                heading.textContent = 'E-Mail zu lang — manuelles Senden';
+                heading.style.marginTop = '0';
+                box.appendChild(heading);
+
+                const info = document.createElement('p');
+                info.textContent = 'Kopieren Sie untenstehenden Text in eine neue E‑Mail an ' + supportEmail + '.';
+                box.appendChild(info);
+
+                const ta = document.createElement('textarea');
+                ta.style.width = '100%';
+                ta.style.height = '300px';
+                ta.value = body + '\n\n';
+                box.appendChild(ta);
+
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = 'In Zwischenablage kopieren';
+                copyBtn.style.marginTop = '8px';
+                copyBtn.className = 'submit';
+                copyBtn.addEventListener('click', async function() {
+                    try {
+                        await navigator.clipboard.writeText(ta.value);
+                        copyBtn.textContent = 'Kopiert!';
+                        copyBtn.disabled = true;
+                    } catch (err) {
+                        alert('Kopieren nicht möglich: ' + err.message);
+                    }
+                });
+                box.appendChild(copyBtn);
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Schließen';
+                closeBtn.style.marginLeft = '8px';
+                closeBtn.className = 'reset';
+                closeBtn.addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                    submitBtn.disabled = false;
+                });
+                box.appendChild(closeBtn);
+
+                modal.appendChild(box);
+                document.body.appendChild(modal);
+                return;
+            }
+
+            // Open mail client
             window.location.href = mailtoUrl;
+            // Re-enable submit after a short delay in case mail client didn't open
+            setTimeout(() => submitBtn.disabled = false, 2000);
         });
     </script>
 </body>
