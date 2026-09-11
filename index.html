@@ -127,6 +127,26 @@
             margin-top: 4px;
         }
 
+        .info-box {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #e0f2fe;
+            border: 1px solid #0ea5e9;
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .info-box a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+
         .actions {
             display: flex;
             gap: 12px;
@@ -399,6 +419,14 @@
                     </span>
                 </label>
             </fieldset>
+
+            <div class="info-box">
+                📋 <strong>Formular-Vorlage:</strong> Dieses Formular ist die Online-Version einer EDV-Ticket-Vorlage. 
+                Die aktuelle Version finden Sie unter: 
+                <a href="https://github.com/OlsbergSchools/EDV-Ticket/blob/main/index.html" target="_blank">
+                    github.com/OlsbergSchools/EDV-Ticket
+                </a>
+            </div>
 
             <div class="actions">
                 <button type="submit" class="submit">
