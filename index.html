@@ -163,36 +163,19 @@
             font-size: 0.85rem;
         }
 
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 11px 12px;
-            border: 1px solid var(--border);
+        .reminder-message {
+            display: none;
+            margin-top: 16px;
+            padding: 14px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
             border-radius: 6px;
-            background: #ffffff;
-            cursor: pointer;
-            color: var(--text);
+            color: #92400e;
+            font-size: 0.95rem;
         }
 
-        .file-input-label:hover {
-            background: #f8f9fa;
-        }
-
-        .file-name {
-            margin-top: 6px;
-            font-size: 0.9rem;
-            color: var(--primary);
+        .reminder-message.show {
+            display: block;
         }
 
         @media (max-width: 650px) {
@@ -390,27 +373,7 @@
             </fieldset>
 
             <fieldset>
-                <legend>Anhänge & Zusätzliche Angaben</legend>
-
-                <div class="field">
-                    <label for="attachment">Datei anhängen</label>
-                    <div class="file-input-wrapper">
-                        <input
-                            type="file"
-                            id="attachment"
-                            name="attachment"
-                            accept="*"
-                        >
-                        <label for="attachment" class="file-input-label">
-                            📎 Datei auswählen
-                        </label>
-                    </div>
-                    <div class="hint">
-                        Die ausgewählte Datei wird im E-Mail-Text als Referenz angegeben.
-                        Sie müssen sie manuell an die E-Mail anhängen.
-                    </div>
-                    <div id="fileName" class="file-name"></div>
-                </div>
+                <legend>Zusätzliche Angaben</legend>
 
                 <div class="field">
                     <label for="additional">
@@ -450,6 +413,11 @@
                     Formular leeren
                 </button>
             </div>
+
+            <div id="reminderMessage" class="reminder-message">
+                💡 <strong>Hinweis:</strong> Falls Sie Dateien oder Screenshots an den IT-Support übermitteln möchten, 
+                fügen Sie diese bitte manuell in der E-Mail-App an, bevor Sie die E-Mail absenden.
+            </div>
         </form>
 
         <p class="privacy">
@@ -466,19 +434,7 @@
         const supportEmail = "it-support@deine-schule.de";
 
         const form = document.getElementById("ticketForm");
-        const attachmentInput = document.getElementById("attachment");
-        const fileNameDisplay = document.getElementById("fileName");
-
-        // Update file name display when file is selected
-        if (attachmentInput) {
-            attachmentInput.addEventListener("change", function() {
-                if (this.files && this.files.length > 0) {
-                    fileNameDisplay.textContent = "Datei: " + this.files[0].name;
-                } else {
-                    fileNameDisplay.textContent = "";
-                }
-            });
-        }
+        const reminderMessage = document.getElementById("reminderMessage");
 
         function valueOf(id) {
             const element = document.getElementById(id);
@@ -501,36 +457,34 @@
                 "Gerätetyp: " + valueOf("deviceType"),
                 "Inventarnummer / Gerätename: " + (valueOf("asset") || "Nicht angegeben"),
                 "Betriebssystem: " + (valueOf("operatingSystem") || "Nicht angegeben"),
-                ""
+                "",
+                "FEHLER",
+                "Kategorie: " + valueOf("category"),
+                "Dringlichkeit: " + valueOf("priority"),
+                "",
+                "Genaue Fehlerbeschreibung:",
+                valueOf("description"),
+                "",
+                "Bereits durchgeführte Maßnahmen:",
+                valueOf("steps") || "Keine Angaben",
+                "",
+                "Erreichbarkeit / mögliche Termine:",
+                valueOf("availability") || "Keine Angaben",
+                "",
+                "WEITERE ANGABEN",
+                valueOf("additional") || "Keine Angaben",
+                "",
+                "Erstellt am: " + new Date().toLocaleString("de-DE")
             ];
 
-            // Add attachment info if file is selected
-            if (attachmentInput && attachmentInput.files && attachmentInput.files.length > 0) {
-                lines.push("ANHANG");
-                lines.push("Dateiname: " + attachmentInput.files[0].name);
-                lines.push("Hinweis: Bitte fügen Sie die Datei manuell an diese E-Mail an.");
-                lines.push("");
-            }
-
-            lines.push("FEHLER");
-            lines.push("Kategorie: " + valueOf("category"));
-            lines.push("Dringlichkeit: " + valueOf("priority"));
-            lines.push("");
-            lines.push("Genaue Fehlerbeschreibung:");
-            lines.push(valueOf("description"));
-            lines.push("");
-            lines.push("Bereits durchgeführte Maßnahmen:");
-            lines.push(valueOf("steps") || "Keine Angaben");
-            lines.push("");
-            lines.push("Erreichbarkeit / mögliche Termine:");
-            lines.push(valueOf("availability") || "Keine Angaben");
-            lines.push("");
-            lines.push("WEITERE ANGABEN");
-            lines.push(valueOf("additional") || "Keine Angaben");
-            lines.push("");
-            lines.push("Erstellt am: " + new Date().toLocaleString("de-DE"));
-
             return lines.join("\n");
+        }
+
+        function showReminder() {
+            reminderMessage.classList.add("show");
+            setTimeout(() => {
+                reminderMessage.classList.remove("show");
+            }, 5000);
         }
 
         form.addEventListener("submit", function(event) {
@@ -559,6 +513,7 @@
                 "&body=" +
                 encodeURIComponent(body);
 
+            showReminder();
             window.location.href = mailtoUrl;
         });
 
@@ -579,6 +534,7 @@
                         const prev = copyBtn.textContent;
                         copyBtn.textContent = 'Kopiert!';
                         copyBtn.disabled = true;
+                        showReminder();
                         setTimeout(() => { copyBtn.textContent = prev; copyBtn.disabled = false; }, 2000);
                     } catch (err) {
                         alert('Kopieren nicht möglich: ' + err.message);
@@ -591,20 +547,13 @@
                     const prev = copyBtn.textContent;
                     copyBtn.textContent = 'Kopiert!';
                     copyBtn.disabled = true;
+                    showReminder();
                     setTimeout(() => { copyBtn.textContent = prev; copyBtn.disabled = false; }, 2000);
                 } catch (err) {
                     alert('Kopieren nicht möglich: ' + err.message);
                 }
             });
         }
-
-        // Reset file input when form is reset
-        form.addEventListener("reset", function() {
-            if (attachmentInput) {
-                attachmentInput.value = "";
-                fileNameDisplay.textContent = "";
-            }
-        });
     </script>
 </body>
 </html>
