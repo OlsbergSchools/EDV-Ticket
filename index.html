@@ -104,6 +104,12 @@
             border-color: var(--primary);
         }
 
+        input:disabled {
+            background: #f1f5f9;
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
         textarea {
             min-height: 150px;
             resize: vertical;
@@ -216,6 +222,16 @@
 
                 <div class="form-row">
                     <div class="field">
+                        <label for="ticketId">Ticket-ID</label>
+                        <input
+                            type="text"
+                            id="ticketId"
+                            name="ticketId"
+                            readonly
+                        >
+                    </div>
+
+                    <div class="field">
                         <label class="required" for="name">Name</label>
                         <input
                             type="text"
@@ -225,7 +241,9 @@
                             required
                         >
                     </div>
+                </div>
 
+                <div class="form-row">
                     <div class="field">
                         <label class="required" for="email">E-Mail-Adresse</label>
                         <input
@@ -236,9 +254,8 @@
                             required
                         >
                     </div>
-                </div>
 
-                 <div class="field">
+                    <div class="field">
                         <label class="required" for="school">Schule / Standort</label>
                         <select id="school" name="school" required>
                             <option value="">Bitte auswählen</option>
@@ -250,6 +267,7 @@
                             
                         </select>
                     </div>
+                </div>
             </fieldset>
 
             <fieldset>
@@ -439,6 +457,21 @@
         const supportEmail = "it-support@deine-schule.de";
 
         const form = document.getElementById("ticketForm");
+        const ticketIdField = document.getElementById("ticketId");
+
+        // Generate Ticket-ID on page load (yymmddhhmm format)
+        function generateTicketId() {
+            const now = new Date();
+            const yy = String(now.getFullYear()).slice(-2);
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            return yy + mm + dd + hh + min;
+        }
+
+        // Set ticket ID on page load
+        ticketIdField.value = generateTicketId();
 
         function valueOf(id) {
             const element = document.getElementById(id);
@@ -450,6 +483,8 @@
             const lines = [
                 "IT-TICKET",
                 "==========",
+                "",
+                "TICKET-ID: " + valueOf("ticketId"),
                 "",
                 "KONTAKT",
                 "Name: " + valueOf("name"),
@@ -493,7 +528,7 @@
             }
 
             const subject =
-                "[IT-Ticket] " +
+                "[IT-Ticket " + valueOf("ticketId") + "] " +
                 valueOf("school") +
                 " – " +
                 valueOf("category") +
