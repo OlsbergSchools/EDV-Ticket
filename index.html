@@ -286,7 +286,7 @@
 
                 <div class="form-row">
                     <div class="field">
-                        <label for="asset">Inventarnummer / Gerätename</label>
+                        <label for="asset">Seriennummer / Gerätename</label>
                         <input
                             type="text"
                             id="asset"
@@ -308,7 +308,7 @@
             </fieldset>
 
             <fieldset>
-                <legend>Fehlerbeschreibung</legend>
+                <legend>Beschreibung</legend>
 
                 <div class="field">
                     <label class="required" for="category">Kategorie</label>
@@ -339,7 +339,7 @@
 
                 <div class="field">
                     <label class="required" for="description">
-                        Genaue Fehlerbeschreibung
+                        Genaue Beschreibung
                     </label>
                     <textarea
                         id="description"
@@ -459,14 +459,14 @@
                 "ORT UND GERÄT",
                 "Raumnummer: " + valueOf("room"),
                 "Gerätetyp: " + valueOf("deviceType"),
-                "Inventarnummer / Gerätename: " + (valueOf("asset") || "Nicht angegeben"),
+                "Seriennummer / Gerätename: " + (valueOf("asset") || "Nicht angegeben"),
                 "Betriebssystem: " + (valueOf("operatingSystem") || "Nicht angegeben"),
                 "",
                 "FEHLER",
                 "Kategorie: " + valueOf("category"),
                 "Dringlichkeit: " + valueOf("priority"),
                 "",
-                "Genaue Fehlerbeschreibung:",
+                "Genaue Beschreibung:",
                 valueOf("description"),
                 "",
                 "Bereits durchgeführte Maßnahmen:",
