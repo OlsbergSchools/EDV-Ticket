@@ -130,8 +130,8 @@
         .info-box {
             margin-bottom: 20px;
             padding: 12px;
-            background: #e0f2fe;
-            border: 1px solid #0ea5e9;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
             border-radius: 6px;
             color: var(--text);
             font-size: 0.9rem;
@@ -181,21 +181,6 @@
             margin-top: 22px;
             color: var(--muted);
             font-size: 0.85rem;
-        }
-
-        .reminder-message {
-            display: none;
-            margin-top: 16px;
-            padding: 14px;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            border-radius: 6px;
-            color: #92400e;
-            font-size: 0.95rem;
-        }
-
-        .reminder-message.show {
-            display: block;
         }
 
         @media (max-width: 650px) {
@@ -420,6 +405,11 @@
                 </label>
             </fieldset>
 
+            <div class="info-box">
+                💡 <strong>Hinweis:</strong> Falls Sie Dateien oder Screenshots an den IT-Support übermitteln möchten, 
+                fügen Sie diese bitte manuell in der E-Mail-App an, bevor Sie die E-Mail absenden.
+            </div>
+
             <div class="actions">
                 <button type="submit" class="submit">
                     Ticket als E-Mail vorbereiten
@@ -432,11 +422,6 @@
                 <button type="reset" class="reset">
                     Formular leeren
                 </button>
-            </div>
-
-            <div id="reminderMessage" class="reminder-message">
-                💡 <strong>Hinweis:</strong> Falls Sie Dateien oder Screenshots an den IT-Support übermitteln möchten, 
-                fügen Sie diese bitte manuell in der E-Mail-App an, bevor Sie die E-Mail absenden.
             </div>
         </form>
 
@@ -454,7 +439,6 @@
         const supportEmail = "it-support@deine-schule.de";
 
         const form = document.getElementById("ticketForm");
-        const reminderMessage = document.getElementById("reminderMessage");
 
         function valueOf(id) {
             const element = document.getElementById(id);
@@ -500,13 +484,6 @@
             return lines.join("\n");
         }
 
-        function showReminder() {
-            reminderMessage.classList.add("show");
-            setTimeout(() => {
-                reminderMessage.classList.remove("show");
-            }, 5000);
-        }
-
         form.addEventListener("submit", function(event) {
             event.preventDefault();
 
@@ -533,7 +510,6 @@
                 "&body=" +
                 encodeURIComponent(body);
 
-            showReminder();
             window.location.href = mailtoUrl;
         });
 
@@ -554,7 +530,6 @@
                         const prev = copyBtn.textContent;
                         copyBtn.textContent = 'Kopiert!';
                         copyBtn.disabled = true;
-                        showReminder();
                         setTimeout(() => { copyBtn.textContent = prev; copyBtn.disabled = false; }, 2000);
                     } catch (err) {
                         alert('Kopieren nicht möglich: ' + err.message);
@@ -567,7 +542,6 @@
                     const prev = copyBtn.textContent;
                     copyBtn.textContent = 'Kopiert!';
                     copyBtn.disabled = true;
-                    showReminder();
                     setTimeout(() => { copyBtn.textContent = prev; copyBtn.disabled = false; }, 2000);
                 } catch (err) {
                     alert('Kopieren nicht möglich: ' + err.message);
